@@ -1,24 +1,29 @@
-import Image from 'next/image';
-import InteractiveCard from './InteractiveCard';
+"use client";
+
+import { Card as MuiCard, CardContent, Typography } from "@mui/material";
+import Rating from "@mui/material/Rating";
 
 interface CardProps {
-  imgSrc: string;
   venueName: string;
+  imgSrc: string;
+  rating: number;
+  onRatingChange: (venueName: string, rating: number) => void;
 }
 
-export default function Card({ imgSrc, venueName }: CardProps) {
+export default function Card({ venueName, imgSrc, rating, onRatingChange }: CardProps) {
   return (
-    <InteractiveCard Element="div"> 
-      <div className="flex flex-col items-center">
-        <Image
-          src={imgSrc}
-          alt={venueName}
-          width={300}
-          height={200}
-          className="rounded-lg"
+    <MuiCard sx={{ maxWidth: 345, padding: 2, textAlign: "center" }}>
+      <img src={imgSrc} alt={venueName} style={{ width: "100%", borderRadius: 8 }} />
+      <CardContent>
+        <Typography variant="h6">{venueName}</Typography>
+        <Rating
+          id={`${venueName} Rating`}
+          name={`${venueName} Rating`}
+          data-testid={`${venueName} Rating`}
+          value={rating}
+          onChange={(_, newValue) => onRatingChange(venueName, newValue ?? 0)}
         />
-        <h3 className="mt-2 text-lg font-semibold">{venueName}</h3>
-      </div>
-    </InteractiveCard>
+      </CardContent>
+    </MuiCard>
   );
 }
